@@ -18,6 +18,7 @@ public class TeleportationManager : MonoBehaviour
 
     [SerializeField]
     ActionBasedSnapTurnProvider snapTurnProvider;
+
     bool _isActive;
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,7 @@ public class TeleportationManager : MonoBehaviour
 
         var cancel = actionAsset.FindActionMap("XRI LeftHand").FindAction("Teleport Mode Cancel");
         cancel.Enable();
-        cancel.performed -= OnTeleportCancel;
+        cancel.performed += OnTeleportCancel;
 
         _thumbstick = actionAsset.FindActionMap("XRI LeftHand").FindAction("Move");
         _thumbstick.Enable();

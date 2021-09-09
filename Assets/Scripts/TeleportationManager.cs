@@ -48,26 +48,29 @@ public class TeleportationManager : MonoBehaviour
         if (_thumbstick.triggered)
             return;
 
-        if (!rayInteractor.TryGetCurrent3DRaycastHit(out RaycastHit hit))
-        {
-            rayInteractor.enabled = false;
-            _isActive = false;
-            return;
-        }
-
+        teleportDestination destination = CheckLocation();
         TeleportRequest request = new TeleportRequest()
         {
-            destinationPosition = hit.point,
+            destinationPosition = destination.location,
         };
 
-        provider.QueueTeleportRequest(request);
+        if (destination.validDestination)
+        {
+            provider.QueueTeleportRequest(request);
+        }
+        else
+        {
+            rayInteractor.enabled = false;
+            return;
+        }
+       
     }
 
     private void OnTeleportActivate(InputAction.CallbackContext context)
     {
         rayInteractor.enabled = true;
         _isActive = true;
-        snapTurnProvider.enabled = false;
+        // snapTurnProvider.enabled = false;
         Debug.Log("ONTELEPORTACTIVATE");
     }
 
@@ -75,7 +78,43 @@ public class TeleportationManager : MonoBehaviour
     {
         rayInteractor.enabled = false;
         _isActive = false;
-        snapTurnProvider.enabled = true;
-        Debug.Log("ONTELEPORTCANCEL");
+        // snapTurnProvider.enabled = true;
+    }
+
+    struct teleportDestination
+    {
+        public Vector3 location;
+        public bool validDestination;
+  
+    }
+
+    private teleportDestination CheckLocation()
+    {
+        teleportDestination destination = new teleportDestination();
+        destination.validDestination = false;
+        
+        if (!(rayInteractor.enabled))
+        {
+  
+            return destination;
+        }
+        if (!rayInteractor.TryGetCurrent3DRaycastHit(out RaycastHit hit))
+        { 
+            return destination;
+        }
+
+       if (hit.transform.GetComponent<TeleportationArea>())
+        {
+            destination.validDestination = true;
+            destination.location = hit.point;
+            Debug.Log(destination.location);
+        }
+        else
+        {
+            destination.validDestination = false;
+            return destination;
+        }
+
+        return destination;
     }
 }

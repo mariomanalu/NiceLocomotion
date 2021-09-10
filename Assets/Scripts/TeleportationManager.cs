@@ -19,12 +19,9 @@ public class TeleportationManager : MonoBehaviour
     [SerializeField]
     ActionBasedSnapTurnProvider snapTurnProvider;
 
-    [SerializeField]
-    ContinuousMoveProviderBase continuousMoveProvider;
-
     bool _isActive;
-    bool toggleVal;
-    UnityEngine.XR.InputDevice controller;
+    // bool toggleVal;
+    // UnityEngine.XR.InputDevice controller;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,23 +38,16 @@ public class TeleportationManager : MonoBehaviour
         _thumbstick = actionAsset.FindActionMap("XRI LeftHand").FindAction("Move");
         _thumbstick.Enable();
 
-        var inputDevices = new List<UnityEngine.XR.InputDevice>();
-        UnityEngine.XR.InputDevices.GetDevices(inputDevices);
-        controller = inputDevices[1]; // 1 represents left hand
+        // var inputDevices = new List<UnityEngine.XR.InputDevice>();
+        // UnityEngine.XR.InputDevices.GetDevices(inputDevices);
+        // controller = inputDevices[1]; // 1 represents left hand
         
 
     }
 
     // Update is called once per frame
     void Update()
-    {
-
-        while (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out toggleVal) && toggleVal)
-        {
-            provider.enabled = false;
-            continuousMoveProvider.enabled = true;
-            snapTurnProvider.enabled = false;
-        }
+    { 
 
         if (!_isActive)
         {
@@ -75,6 +65,7 @@ public class TeleportationManager : MonoBehaviour
 
         if (destination.validDestination)
         {
+            Debug.Log("REQUESTED POSITION " + request.destinationPosition);
             provider.QueueTeleportRequest(request);
         }
         else
@@ -82,11 +73,6 @@ public class TeleportationManager : MonoBehaviour
             rayInteractor.enabled = false;
             return;
         }
-
-       
-
-
-       
     }
 
     private void OnTeleportActivate(InputAction.CallbackContext context)
@@ -126,6 +112,7 @@ public class TeleportationManager : MonoBehaviour
             return destination;
         }
 
+        Debug.Log("HIT POINT" + hit.point);
        if (hit.transform.GetComponent<TeleportationArea>())
         {
             destination.validDestination = true;

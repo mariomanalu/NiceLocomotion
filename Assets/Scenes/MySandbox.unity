@@ -620,8 +620,8 @@ MonoBehaviour:
   actionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   rayInteractor: {fileID: 1418929807}
-  provider: {fileID: 408799905}
-  snapTurnProvider: {fileID: 408799909}
+  teleportationProvider: {fileID: 408799905}
+  continuousMoveProvider: {fileID: 408799908}
 --- !u!114 &408799908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1357,8 +1357,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   m_ValidColorGradient:
     serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key0: {r: 0.1505878, g: 1, b: 0, a: 1}
+    key1: {r: 0.20159245, g: 1, b: 0, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}

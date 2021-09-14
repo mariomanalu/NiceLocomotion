@@ -14,14 +14,14 @@ public class TeleportationManager : MonoBehaviour
     private XRRayInteractor rayInteractor;
 
     [SerializeField]
-    TeleportationProvider provider;
+    TeleportationProvider teleportationProvider;
 
     [SerializeField]
-    ActionBasedSnapTurnProvider snapTurnProvider;
+    ContinuousMoveProviderBase continuousMoveProvider;
 
     bool _isActive;
-    // bool toggleVal;
-    // UnityEngine.XR.InputDevice controller;
+    bool toggleVal;
+    UnityEngine.XR.InputDevice controller;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,17 +38,27 @@ public class TeleportationManager : MonoBehaviour
         _thumbstick = actionAsset.FindActionMap("XRI LeftHand").FindAction("Move");
         _thumbstick.Enable();
 
-        // var inputDevices = new List<UnityEngine.XR.InputDevice>();
-        // UnityEngine.XR.InputDevices.GetDevices(inputDevices);
-        // controller = inputDevices[1]; // 1 represents left hand
-        
-
+       
     }
 
     // Update is called once per frame
     void Update()
-    { 
+    {
+        var inputDevices = new List<UnityEngine.XR.InputDevice>();
+        UnityEngine.XR.InputDevices.GetDevices(inputDevices);
+        controller = inputDevices[1]; // 1 represents left hand
 
+        if (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out toggleVal) && toggleVal)
+        {
+            teleportationProvider.enabled = false;
+            continuousMoveProvider.enabled = true;
+            rayInteractor.enabled = false;
+        }
+        else
+        {
+            teleportationProvider.enabled = !false;
+            continuousMoveProvider.enabled = !true;
+        }
         if (!_isActive)
         {
             return;
@@ -65,8 +75,9 @@ public class TeleportationManager : MonoBehaviour
 
         if (destination.validDestination)
         {
-            Debug.Log("REQUESTED POSITION " + request.destinationPosition);
-            provider.QueueTeleportRequest(request);
+            teleportationProvider.QueueTeleportRequest(request);
+            _isActive = false;
+            rayInteractor.enabled = false;
         }
         else
         {
@@ -79,15 +90,12 @@ public class TeleportationManager : MonoBehaviour
     {
         rayInteractor.enabled = true;
         _isActive = true;
-        // snapTurnProvider.enabled = false;
-        Debug.Log("ONTELEPORTACTIVATE");
     }
 
     private void OnTeleportCancel(InputAction.CallbackContext context)
     {
         rayInteractor.enabled = false;
         _isActive = false;
-        // snapTurnProvider.enabled = true;
     }
 
     struct teleportDestination
@@ -112,12 +120,10 @@ public class TeleportationManager : MonoBehaviour
             return destination;
         }
 
-        Debug.Log("HIT POINT" + hit.point);
        if (hit.transform.GetComponent<TeleportationArea>())
         {
             destination.validDestination = true;
             destination.location = hit.point;
-            Debug.Log(destination.location);
         }
         else
         {

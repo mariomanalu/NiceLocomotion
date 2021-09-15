@@ -120,7 +120,15 @@ public class TeleportationManager : MonoBehaviour
             return destination;
         }
 
-       if (hit.transform.GetComponent<TeleportationArea>())
+        // Teleportation Anchor
+        TeleportationAnchor anchor = hit.transform.GetComponent<TeleportationAnchor>();
+        if (anchor)
+        {
+            destination.validDestination = true;
+            destination.location = anchor.teleportAnchorTransform.position;
+        }
+        // Teleportation Area  
+        else if (hit.transform.GetComponent<TeleportationArea>())
         {
             destination.validDestination = true;
             destination.location = hit.point;

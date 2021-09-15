@@ -14,6 +14,12 @@ Either download the whole repo or just attach the TeleportManager.cs script to t
 ### Setting up XR Interaction Toolkit
 1. Download the XR Interaction Toolkit from the package manager.
 2. Notice that you must "Enable Preview Package" from project settings to do that.
+### Setting up XRI Default Input Actions
+1. Go to Samples > XR Interaction Toolkit > 1.0.0-pre.5 > Default Input Actions > XRI Default Input Actions.
+2. Go to the settings for XRI LeftHand (assuming locomotion is controller by the left controller).
+3. Go to Teleport Mode Activate and Primary2DAxis.
+4. Go to the Interactions properties.
+5. Under Sector, set the directions to be North. This allows teleportation to be activated by pushing up the thumbstick on the controller.
 ### Setting up VR Rig
 1. Create an XR Rig Device-Based object in the scene.
 2. Create a Locomotion System as a child of the XR Rig Device-Based.

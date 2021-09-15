@@ -28,3 +28,4 @@ Either download the whole repo or just attach the TeleportManager.cs script to t
 ### Dislcaimer
 1. I assume to use left hand to move and right hand to rotate. This setting can be changed. It works either way.
 2. I think if one downloads the whole repo and runs it on Unity, there is nothing else to be done. It will run fine.
+3. If the project is ran on Unity, there will be some errors printed out to the console. The error refers to the block of code that reads in input device. I think the error comes up because Unity takes several frames to detect the input device. The process of identifying what VR equipment the user has does not happen in one frame. That said, the errors do not interfere with the game.

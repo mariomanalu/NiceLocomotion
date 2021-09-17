@@ -574,9 +574,9 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Grab",
+                    "name": "Force Pull Activate",
                     "type": "Button",
-                    "id": "b65f61a9-a237-48de-80c8-b0248fd47933",
+                    "id": "bfdcfc1f-4ab9-4020-ba1c-8530d0bc2584",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -838,12 +838,45 @@
                 },
                 {
                     "name": "",
-                    "id": "9c871886-64fc-4260-9061-71c0de2cd9dd",
+                    "id": "2dcab195-0443-4327-a466-56c26ee323a3",
+                    "path": "<XRController>{RightHand}/primary2DAxis",
+                    "interactions": "",
+                    "processors": "StickDeadzone",
+                    "groups": "Continuous Move",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b6b7a96-6336-4fa9-a8ad-4d01008afaaa",
+                    "path": "<XRController>{LeftHand}/Primary2DAxis",
+                    "interactions": "Sector(directions=1)",
+                    "processors": "",
+                    "groups": "Noncontinuous Move",
+                    "action": "Teleport Mode Activate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "881e341e-3a1d-4716-bdd5-aeb06be17caf",
                     "path": "<XRController>{RightHand}/Primary2DAxis",
-                    "interactions": "Sector(directions=2,sweepBehavior=2)",
+                    "interactions": "Sector(directions=1)",
+                    "processors": "",
+                    "groups": "Noncontinuous Move",
+                    "action": "Force Pull Activate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "da19651b-73ff-413b-a65e-c717c88fe7c4",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Generic XR Controller",
-                    "action": "Grab",
+                    "action": "Force Pull Activate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

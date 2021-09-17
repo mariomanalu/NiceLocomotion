@@ -59,6 +59,7 @@ public class TeleportationManager : MonoBehaviour
             teleportationProvider.enabled = !false;
             continuousMoveProvider.enabled = !true;
         }
+        
         if (!_isActive)
         {
             return;
@@ -132,7 +133,6 @@ public class TeleportationManager : MonoBehaviour
         {
             destination.validDestination = true;
             destination.location = hit.point;
-            Debug.Log(destination.location);
         }
         else
         {

@@ -1421,6 +1421,7 @@ GameObject:
   - component: {fileID: 460195172}
   - component: {fileID: 460195171}
   - component: {fileID: 460195170}
+  - component: {fileID: 460195174}
   m_Layer: 7
   m_Name: Right Ray Interactor
   m_TagString: Untagged
@@ -1747,7 +1748,7 @@ MonoBehaviour:
   m_HoverToSelect: 0
   m_HoverTimeToSelect: 0.5
   m_EnableUIInteraction: 1
-  m_AllowAnchorControl: 1
+  m_AllowAnchorControl: 0
   m_UseForceGrab: 1
   m_RotateSpeed: 180
   m_TranslateSpeed: 1
@@ -1870,6 +1871,22 @@ MonoBehaviour:
     m_Reference: {fileID: 875253871413052681, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_ButtonPressPoint: 0.5
+--- !u!114 &460195174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 460195168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 396044d2f85a1df45a7c423f0c99d83d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  rayInteractor: {fileID: 460195172}
+  attachAnchorTransform: {fileID: 460195169}
 --- !u!1001 &472603999
 PrefabInstance:
   m_ObjectHideFlags: 0

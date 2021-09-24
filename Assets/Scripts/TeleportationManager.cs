@@ -1,27 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
 public class TeleportationManager : MonoBehaviour
 {
-    [SerializeField]
-    private InputActionAsset actionAsset;
+    [SerializeField] private InputActionAsset actionAsset;
 
     private InputAction _thumbstick;
 
-    [SerializeField]
-    private XRRayInteractor rayInteractor;
+    [SerializeField] private XRRayInteractor rayInteractor;
 
-    [SerializeField]
-    TeleportationProvider teleportationProvider;
+    [SerializeField] TeleportationProvider teleportationProvider;
 
-    [SerializeField]
-    ContinuousMoveProviderBase continuousMoveProvider;
+    [SerializeField] ContinuousMoveProviderBase continuousMoveProvider;
 
     bool _isActive;
-    bool toggleVal;
+    bool joystick;
     UnityEngine.XR.InputDevice controller;
+
+    bool teleportToggle;
+    bool joystickDown;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +38,8 @@ public class TeleportationManager : MonoBehaviour
         _thumbstick = actionAsset.FindActionMap("XRI LeftHand").FindAction("Move");
         _thumbstick.Enable();
 
-       
+        teleportToggle = true;
+
     }
 
     // Update is called once per frame
@@ -46,18 +47,29 @@ public class TeleportationManager : MonoBehaviour
     {
         var inputDevices = new List<UnityEngine.XR.InputDevice>();
         UnityEngine.XR.InputDevices.GetDevices(inputDevices);
-        controller = inputDevices[1]; // 1 represents left hand
+        try{
+            controller = inputDevices[1]; // 1 represents left hand
+        } catch(ArgumentOutOfRangeException){
+        }
+        
+        
 
-        if (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out toggleVal) && toggleVal)
+        if (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out joystick) && joystick)
         {
-            teleportationProvider.enabled = false;
-            continuousMoveProvider.enabled = true;
-            rayInteractor.enabled = false;
+            if(!joystickDown){ // JoystickDown boolean is used to catch the down event so that this code is not called every frame the button is pressed
+                joystickDown = true;
+                teleportToggle = !teleportToggle;
+                teleportationProvider.enabled = !teleportationProvider.enabled;
+                continuousMoveProvider.enabled = !continuousMoveProvider.enabled;
+                rayInteractor.enabled = !rayInteractor.enabled;
+                if(!teleportToggle){
+                    rayInteractor.enabled = false;
+                }
+            }
         }
         else
         {
-            teleportationProvider.enabled = !false;
-            continuousMoveProvider.enabled = !true;
+            joystickDown = false; // When the joystick click is let go then this is set back to false so that it can catch the first click again
         }
         
         if (!_isActive)
@@ -89,14 +101,19 @@ public class TeleportationManager : MonoBehaviour
 
     private void OnTeleportActivate(InputAction.CallbackContext context)
     {
-        rayInteractor.enabled = true;
-        _isActive = true;
+        if(teleportToggle){
+            rayInteractor.enabled = true;
+            _isActive = true;
+        }
+        
     }
 
     private void OnTeleportCancel(InputAction.CallbackContext context)
     {
-        rayInteractor.enabled = false;
-        _isActive = false;
+        if(teleportToggle){
+            rayInteractor.enabled = false;
+            _isActive = false;
+        }
     }
 
     struct teleportDestination

@@ -6,13 +6,11 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PullManager : MonoBehaviour
 {
-    [SerializeField]
-    private InputActionAsset actionAsset;
+    [SerializeField] private InputActionAsset actionAsset;
 
     private InputAction _thumbstick;
 
-    [SerializeField]
-    private XRRayInteractor rayInteractor; // right ray interactor
+    [SerializeField] private XRRayInteractor rayInteractor; // right ray interactor
     public Transform attachAnchorTransform;
     protected InputAction grab;
 
@@ -70,6 +68,10 @@ public class PullManager : MonoBehaviour
         public bool grabbable;
         public Rigidbody rigidbody;
     }
+
+    // I don't this I would recommend going about this this way. I might do something closer to the code i had for the highlighting demo
+    // There I have an object that is marked as highlightable and the controller keeps track of the object it is currently hightlighting
+    // That way we can have it so that once the object has been pointed to and grabbed, we can let go of the joystick and move it around with our hand
     private grabbableObjects CheckGrabbable()
     {
        grabbableObjects item = new grabbableObjects();

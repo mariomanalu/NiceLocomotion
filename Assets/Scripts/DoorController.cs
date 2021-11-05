@@ -7,79 +7,61 @@ public class DoorController : MonoBehaviour
 
     private Vector3 endPosLeft;
     private Vector3 endPosRight;
-    private Vector3 endPos;
-    private Vector3 startPos;
     private Vector3 startPosLeft;
     private Vector3 startPosRight;
-    private float delay = 0.0f;
-    public float speed = 1.0f;
+    private Vector3 leftOffset;
+    private Vector3 rightOffset;
+    [SerializeField] float speed = 1.0f;
     [SerializeField] GameObject leftDoor;
     [SerializeField] GameObject rightDoor;
-    // [SerializeField] Collider doorCollider;
-
-    bool opening = true;
-    bool alreadyOpen;
-    bool alreadyClosed;
-    bool moving = false;
+    [SerializeField] Collider doorCollider;
+    private bool opening;
+    private bool closed;
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 dummy = new Vector3(30, 0, 0);
-        startPos = transform.position;
-        endPos = startPos + dummy;
+        startPosLeft = leftDoor.transform.position;
+        startPosRight = rightDoor.transform.position;
+        opening = false;
+        closed = true;
 
-        Debug.Log(startPos);
-        Debug.Log(endPos);
+        leftOffset = new Vector3(-2.73f, 0, 0);
+        rightOffset = new Vector3(2.73f, 0, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(moving)
+        if (opening)
         {
-            if(opening)
-            {
-                Debug.Log("MOVING");
-                MoveDoor(endPos);
-            }
-            else
-            {
-                MoveDoor(startPos);
-            }
-        }
-    }
-
-    void MoveDoor(Vector3 goalPos)
-    {
-        float dist = Vector3.Distance(transform.position, goalPos);
-
-        if (dist > .1f)
-        {
-            transform.position = Vector3.Lerp(startPos, goalPos, speed * Time.deltaTime);
+            leftDoor.transform.position = Vector3.Lerp(leftDoor.transform.position, startPosLeft + leftOffset, 5 * Time.deltaTime);
+            rightDoor.transform.position = Vector3.Lerp(rightDoor.transform.position, startPosRight + rightOffset, 5 * Time.deltaTime);
         }
         else
         {
-            if(opening)
-            {
-                delay += Time.deltaTime;
-                // Holding the door open for 1.5f seconds
-                if (delay > 1.5f)
-                {
-                    opening = false;
-                }
-            }
-            else
-            {
-                moving = false;
-                opening = true;
-            }
+            leftDoor.transform.position = Vector3.Lerp(leftDoor.transform.position, startPosLeft, 5 * Time.deltaTime);
+            rightDoor.transform.position = Vector3.Lerp(rightDoor.transform.position, startPosRight, 5 * Time.deltaTime);
         }
     }
 
-    public bool Moving
+    private void OnTriggerEnter(Collider collider)
     {
-        get { return moving; }
-        set { moving = value; }
+        
+        if (collider.gameObject.tag == "Player")
+        {
+            opening = true;
+            Debug.Log(collider.gameObject.name);
+        }
+    }
+
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.gameObject.tag == "Player")
+        {
+            opening = false;
+            Debug.Log(collider.gameObject.name);
+        }
+        
     }
 
 }

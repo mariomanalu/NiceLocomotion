@@ -21,7 +21,7 @@ public class PullManager : MonoBehaviour
     {
         rayInteractor.enabled = false;
 
-        var activate = actionAsset.FindActionMap("XRI RightHand").FindAction("Force Pull Activate");
+        var activate = actionAsset.FindActionMap("XRI RightHand").FindAction("Alternate Force Pull Activate");
         activate.Enable();
         activate.performed += OnForcePullActivate;
 

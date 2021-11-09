@@ -580,6 +580,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Alternate Force Pull Activate",
+                    "type": "Button",
+                    "id": "00cc3219-6d7f-4ba1-8a01-98b51b615562",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -877,6 +885,17 @@
                     "processors": "",
                     "groups": "Generic XR Controller",
                     "action": "Force Pull Activate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6232c82f-d1bb-4ebf-9bb0-d26d525a7cde",
+                    "path": "<XRController>{RightHand}/gripButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "Alternate Force Pull Activate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

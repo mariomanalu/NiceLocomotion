@@ -58,18 +58,21 @@ public class TeleportationManager : MonoBehaviour
         {
             if(!joystickDown){ // JoystickDown boolean is used to catch the down event so that this code is not called every frame the button is pressed
                 joystickDown = true;
-                teleportToggle = !teleportToggle;
-                teleportationProvider.enabled = !teleportationProvider.enabled;
-                continuousMoveProvider.enabled = !continuousMoveProvider.enabled;
-                rayInteractor.enabled = !rayInteractor.enabled;
-                if(!teleportToggle){
-                    rayInteractor.enabled = false;
-                }
             }
         }
         else
-        {
-            joystickDown = false; // When the joystick click is let go then this is set back to false so that it can catch the first click again
+        {   
+            if(joystickDown){
+                teleportToggle = !teleportToggle;
+                teleportationProvider.enabled = !teleportationProvider.enabled;
+                continuousMoveProvider.enabled = !continuousMoveProvider.enabled;
+                rayInteractor.enabled = false;
+                // if(!teleportToggle){
+                //     rayInteractor.enabled = false;
+                // }
+                joystickDown = false; // When the joystick click is let go then this is set back to false so that it can catch the first click again
+            }
+            
         }
         
         if (!_isActive)

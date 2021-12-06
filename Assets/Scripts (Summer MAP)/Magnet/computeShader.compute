@@ -1,0 +1,135 @@
+#pragma kernel VectorField
+
+// The buffer storing the positions
+RWStructuredBuffer<float3> _Positions;
+
+// The buffer storing the value of the vector field at each point
+RWStructuredBuffer<float3> _Vectors;
+// It's set every frame by the C# script.
+
+// The rescaled version of the vector field
+RWStructuredBuffer<float3> _PlotVectors;
+// Buffers that store the other coordinate axes
+RWStructuredBuffer<float3> _Vectors2;
+RWStructuredBuffer<float3> _Vectors3;
+RWStructuredBuffer<float3> _BField;
+float3 _OriginPosition;
+// The coordinates of the Graph transform
+float3 _CenterPosition;
+// How do we deal with offset centers...
+
+// int _SideLength; // kind of necessary because of the cubic thread setup? or is there a workaround with groups?
+// int shift;
+int _XLength, _YLength, _ZLength;
+// The number of points in each direction
+float _Spacing;
+int _Charge;
+float3 _ChargePosition;
+// The distance between neighboring field points
+
+
+void ComputeNorthDeltaR(float index){
+    float3 r = _Positions[index];
+    float3 delta_r = r - _ChargePosition;
+    float r_cube = pow(delta_r, 3);
+    _BField[index] = ((1 * _Charge) / r_cube) * delta_r;
+};
+
+
+int IDToIndex(float3 id)
+{
+    return id.x + _XLength * id.y + _XLength * _YLength * id.z;
+};
+
+#include "FieldLibrary.hlsl"
+
+// Restate this just as "Calculate Position"
+void CalculatePosition(float3 id)
+{
+    _Positions[IDToIndex(id)] = id * _Spacing + _OriginPosition;
+    // I really hope this is right. 
+};
+
+
+
+float Rescale(float3 vect) {
+	// Renormalizing...
+	float vect_mag = sqrt(vect.x * vect.x + vect.y * vect.y + vect.z * vect.z);
+    return _Spacing * (1 - 1 / pow(vect_mag + 1, 2)) / (vect_mag + 0.000000001);
+};
+
+
+
+void FieldStrength(float index, FieldInterface field)
+{
+    float3 result = 0;
+    float3 position = _Positions[index];
+	result = field.Field(position);
+    _Vectors[index] = result;
+    result *= Rescale(result);
+    _PlotVectors[index] = result;
+}; // REFACTOR IN TERMS OF _PlotVectors!!!
+
+
+
+void CalcVectors23(float index)
+{ // Calculates the orthogonal vectors, given a vector.
+	// The other two unit vectors should be orthogonal to the first and have the same magnitude scaling.
+	// Please find a different way to do this. 
+    float3 vect = _PlotVectors[index];
+    float vect_mag = sqrt(vect.x * vect.x + vect.y * vect.y + vect.z * vect.z);
+    float3 vect_2;
+    float3 vect_3;
+    if (vect.x == 0.0 && vect.y == 0.0 && vect.z == 0.0)
+    { // Check whether we should just make the mesh disappear. 
+        _Vectors2[index] = float3(0.0, 0.0, 0.0);
+        _Vectors3[index] = float3(0.0, 0.0, 0.0);
+        return;
+    }
+	
+	// Depending on how the material works and if the trans. matrix needs to scale, NORMALIZE VECT HERE.
+    if ((vect.x == 0.0) && (vect.y == 0.0))
+    { // Guaranteeing that vect_2 isn't parallel with vect with 
+        vect_2.x = 0.0;
+        vect_2.y = -vect.z;
+        vect_2.z = vect.y;
+    }
+    else
+    {
+        vect_2.x = vect.y;
+        vect_2.y = -vect.x;
+        vect_2.z = 0.0;
+    }
+
+	// Re-magnituding vect_2
+    float vect_2_mag = sqrt(vect_2.x * vect_2.x + vect_2.y * vect_2.y + vect_2.z * vect_2.z);
+    vect_2 *= (vect_mag / vect_2_mag);
+
+	// Cross product!
+    vect_3.x = vect.y * vect_2.z - vect.z * vect_2.y;
+    vect_3.y = vect.z * vect_2.x - vect.x * vect_2.z;
+    vect_3.z = vect.x * vect_2.y - vect.y * vect_2.x;
+
+	// Re-magnituding vect_3
+    float vect_3_mag = sqrt(vect_3.x * vect_3.x + vect_3.y * vect_3.y + vect_3.z * vect_3.z);
+    vect_3 *= (vect_mag / vect_3_mag);
+	
+    _Vectors2[index] = vect_2;
+    _Vectors3[index] = vect_3;
+};
+
+
+
+[numthreads(4, 4, 4)]
+void VectorField(uint3 id : SV_DispatchThreadID)
+{
+    Outwards field;
+    if (id.x < (uint) _XLength && id.y < (uint) _YLength && id.z < (uint) _ZLength)
+    {
+        float index = IDToIndex(id);
+        CalculatePosition(id);
+        FieldStrength(index, field);
+        //ComputeNorthDeltaR(index);
+        CalcVectors23(index);
+    }
+};

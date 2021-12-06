@@ -1,0 +1,91 @@
+#pragma kernel MagneticField
+#pragma kernel Electric
+// The buffer storing the positions
+RWStructuredBuffer<float3> _Positions;
+
+// The buffer storing the value of the vector field at each point
+RWStructuredBuffer<float3> _Vectors;
+
+// The buffer storing the value of the vector field at each point in the past
+RWStructuredBuffer<float3> _DbArray;
+RWStructuredBuffer<float3> _MagneticFieldPast;
+RWStructuredBuffer<float3> _IntegrandPast;
+RWStructuredBuffer<float3> _Integrand;
+// It's set every frame by the C# script.
+
+// The (0,0,0) point of the field
+float3 _CenterPosition;
+float _TimeInterval;
+float _TimePast;
+float _TimeNow;
+int _NumberOfPoints;
+float _Distance;
+// These buffers allow you to send additional arguments to whatever your field function is. 
+StructuredBuffer<float> _FloatArgs;
+StructuredBuffer<float3> _VectorArgs;
+StructuredBuffer<float3> _VelocityArgs;
+
+// It's up to you to parse these inside the function, so you can split them into two separate arrays
+// if you choose. Just remember that not every model supports GetDimensions, so you need to figure
+// out for yourself how to stop from going out of bounds. 
+
+// You can try to make those RWStructuredBuffers, but that crashed my computer so I'm not going to
+// do that. 
+
+
+
+
+#include "FieldLibrary.hlsl"
+
+
+#define KERNEL_NAME(fieldName) \
+    [numthreads(64, 1, 1)] \
+    void fieldName##Field(uint3 id : SV_DispatchThreadID) { \
+        uint bufferSize; \
+        uint stride; \
+        _Positions.GetDimensions(bufferSize, stride); \
+        if (id.x < bufferSize) { \
+            _Vectors[id.x] = fieldName(_Positions[id.x] - _CenterPosition, id.x); \
+        } \
+    }
+
+[numthreads(64, 1, 1)] 
+void DbField(uint3 id : SV_DispatchThreadID) { 
+    uint bufferSize; 
+    uint stride;
+    
+    _Positions.GetDimensions(bufferSize, stride); 
+    if (id.x < bufferSize){
+        _Vectors[id.x] = 0.9 * _Vectors[id.x] + 0.1 * Db(_Positions[id.x] - _CenterPosition, id.x); 
+        } 
+}
+
+#define PI 3.14159265358979323846
+
+[numthreads(64, 1, 1)] 
+void Electric(uint3 id : SV_DispatchThreadID) {
+    uint bufferSize; 
+    uint stride;
+    
+    _Positions.GetDimensions(bufferSize, stride); 
+    if (id.x < bufferSize){
+        float3 result = float3(0.0, 0.0, 0.0);
+        float i;
+        for (i = 1.0; i < 3.0; i++) // numCharges + 0.0; i++)
+        {
+            // The zeroth index of _VectorArgs is unused so that the two buffers align.
+            float3 displacement = _Positions[id.x] - _VectorArgs[i];
+            float distanceSquared = pow(length(displacement),2);
+            if (fmod(i,2) == 0)
+            {   
+                result += cross(_VelocityArgs[i], displacement)/distanceSquared;
+            }
+            else
+            {
+                result -= cross(_VelocityArgs[i], displacement)/distanceSquared;
+            }
+        }
+        _Vectors[id.x] = result;
+    }
+}
+KERNEL_NAME(Magnetic)

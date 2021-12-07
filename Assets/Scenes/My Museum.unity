@@ -4577,22 +4577,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 582549592}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &322096997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 322096996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ea350bf865b12346ae3a74834669075, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 1
-  leftDoor: {fileID: 930141539}
-  rightDoor: {fileID: 255741943}
-  doorCollider: {fileID: 322096998}
 --- !u!65 &322096998
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11824,12 +11808,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1790919343}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &704149595 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1278267228540944, guid: a02ce749f148249039a33e6457063ccd,
-    type: 3}
-  m_PrefabInstance: {fileID: 632122515}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &708374426 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1999827312459250, guid: 4694d625f5bfc4a2088994277336ad92,
@@ -14500,12 +14478,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &1007102615 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1757656481039862, guid: a02ce749f148249039a33e6457063ccd,
-    type: 3}
-  m_PrefabInstance: {fileID: 632122515}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1011312988
 Mesh:
   m_ObjectHideFlags: 0
@@ -19216,10 +19188,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea350bf865b12346ae3a74834669075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  leftDoor: {fileID: 704149595}
-  rightDoor: {fileID: 1007102615}
-  doorCollider: {fileID: 1228355837}
 --- !u!65 &1228355837
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24215,6 +24183,7 @@ GameObject:
   - component: {fileID: 1482152952}
   - component: {fileID: 1482152951}
   - component: {fileID: 1482152949}
+  - component: {fileID: 1482152950}
   m_Layer: 0
   m_Name: XR Rig
   m_TagString: Player
@@ -24236,6 +24205,22 @@ CapsuleCollider:
   m_Height: 3.3070028
   m_Direction: 1
   m_Center: {x: -0.07786751, y: 0.14684045, z: 0}
+--- !u!114 &1482152950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482152948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 313c470b707d73b4a94fd0e7b6b76d4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+  leftDoor: {fileID: 930141539}
+  rightDoor: {fileID: 255741943}
+  doorCollider: {fileID: 322096998}
 --- !u!143 &1482152951
 CharacterController:
   m_ObjectHideFlags: 0

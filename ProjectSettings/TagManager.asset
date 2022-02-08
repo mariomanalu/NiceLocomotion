@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Door
   - Cube
+  - graph
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Left Hand
   - Teleportable Floor
   - Door
-  - 
+  - graph
   - 
   - 
   - 

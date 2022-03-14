@@ -24467,7 +24467,6 @@ GameObject:
   - component: {fileID: 1482152951}
   - component: {fileID: 1482152949}
   - component: {fileID: 1482152950}
-  - component: {fileID: 1482152956}
   m_Layer: 0
   m_Name: XR Rig
   m_TagString: Player
@@ -24586,23 +24585,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1482152956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482152948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd51e1dce24075499638bb4de9bef27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f,
-    type: 3}
-  cameraTransform: {fileID: 1626582059}
-  nodePrefab: {fileID: 7561075206458064737, guid: 1a604a5c5128c0c4db20395d1030ce7e,
-    type: 3}
 --- !u!1 &1505841423 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8446659932617040886, guid: 79e84335316c2d644ac5fcb46f61ab13,
@@ -31545,6 +31527,7 @@ GameObject:
   - component: {fileID: 1902174342}
   - component: {fileID: 1902174339}
   - component: {fileID: 1902174340}
+  - component: {fileID: 1902174341}
   m_Layer: 0
   m_Name: RightHand Controller
   m_TagString: Untagged
@@ -31653,6 +31636,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1902174341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902174337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd51e1dce24075499638bb4de9bef27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  cameraTransform: {fileID: 1626582059}
+  nodePrefab: {fileID: 7561075206458064737, guid: 1a604a5c5128c0c4db20395d1030ce7e,
+    type: 3}
 --- !u!114 &1902174342
 MonoBehaviour:
   m_ObjectHideFlags: 0

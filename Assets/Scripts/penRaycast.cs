@@ -21,6 +21,5 @@ public class penRaycast : MonoBehaviour
                 hit.collider.gameObject.GetComponent<Renderer>().material = material;
             }
         }
-
     }
 }

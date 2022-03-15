@@ -120,8 +120,8 @@ public class graphConstructor : MonoBehaviour
 
     void ConnectNode()
     {
-        Vector3 end = nodeArray[0].transform.position;
-        Vector3 start = nodeArray[1].transform.position;
+        Vector3 end = connectNodeArray[0].transform.position;
+        Vector3 start = connectNodeArray[1].transform.position;
         var offset = end - start;
         var scale = new Vector3(width, offset.magnitude / 2.0f, width);
         var position = start + (offset / 2.0f);
@@ -130,11 +130,11 @@ public class graphConstructor : MonoBehaviour
         cylinder.transform.up = offset;
         cylinder.transform.localScale = scale;
 
-        nodeArray[0].GetComponent<Outline>().enabled = false;
-        nodeArray[1].GetComponent<Outline>().enabled = false;
+        connectNodeArray[0].GetComponent<Outline>().enabled = false;
+        connectNodeArray[1].GetComponent<Outline>().enabled = false;
 
-        nodeArray[0] = null;
-        nodeArray[1] = null;
+        connectNodeArray[0] = null;
+        connectNodeArray[1] = null;
         connectNodeCounter = 0;
 
     }

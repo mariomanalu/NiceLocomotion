@@ -28,7 +28,7 @@ public class graphConstructor : MonoBehaviour
     private float distance = 3.0f;
 
     // Create an array to store the node. For now, set the size to 3.
-    private static int size = 3;
+    private static int size = 10;
     private GameObject[] nodeArray = new GameObject[size];
     private int nodeCounter = 0;
 

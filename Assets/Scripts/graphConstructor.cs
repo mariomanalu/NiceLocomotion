@@ -44,7 +44,7 @@ public class graphConstructor : MonoBehaviour
         UnityEngine.XR.InputDevices.GetDevices(inputDevices);
         try
         {
-            controller = inputDevices[2]; // 2 represents right hand
+            controller = inputDevices[1]; // 1 represents left hand
         }
         catch (ArgumentOutOfRangeException)
         {
@@ -70,7 +70,7 @@ public class graphConstructor : MonoBehaviour
         RaycastHit hit;
         Ray targetRay = new Ray(transform.position, transform.forward);
         Physics.Raycast(targetRay, out hit, distance);
-      
+       
 
         if (controller.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out secondaryButton) && secondaryButton)
         {
@@ -84,20 +84,21 @@ public class graphConstructor : MonoBehaviour
         {
             if (secondaryButtonPressed && hit.collider.tag == "Node")
             {
-                if (connectNodeCounter < 2)
+                if (connectNodeCounter == 0)
                 {  
-                    connectNodeArray[connectNodeCounter] = hit.collider.gameObject;
-                    hit.collider.gameObject.GetComponent<Outline>().OutlineColor = Color.green;
+                    connectNodeArray[0] = hit.collider.gameObject;
 
-                    Debug.Log("ConnectNodeCounter before increment: " + connectNodeCounter);
-                    connectNodeCounter += 1;
-                    Debug.Log("ConnectNodeCounter after increment: " + connectNodeCounter);
-                    if (connectNodeCounter == 2)
+                    connectNodeCounter += 1;                   
+                }
+
+                if (connectNodeCounter == 1)
+                {
+                    if (hit.collider.gameObject != connectNodeArray[0])
                     {
-                        Debug.Log("Caalling connect node");
+                        connectNodeArray[1] = hit.collider.gameObject;
+                        Debug.Log("Calling connect node");
                         ConnectNode();
                     }
-                    
                 }
                 
                 secondaryButtonPressed = false; // When the button press is let go then this is set back to false so that it can catch the first click again
@@ -112,7 +113,7 @@ public class graphConstructor : MonoBehaviour
         {
             GameObject newNode = Instantiate(nodePrefab, cameraTransform.position + (cameraTransform.forward * 5), Quaternion.identity);
             newNode.tag = "Node";
-            newNode.AddComponent<Outline>();
+            // newNode.AddComponent<Outline>();
             nodeArray[nodeCounter] = newNode;
             nodeCounter += 1;
         }
@@ -122,6 +123,10 @@ public class graphConstructor : MonoBehaviour
     {
         Vector3 end = connectNodeArray[0].transform.position;
         Vector3 start = connectNodeArray[1].transform.position;
+
+        Debug.Log("End position: " + end.x + end.y + end.z);
+        Debug.Log("Start position: " + start.x + start.y + start.z);
+
         var offset = end - start;
         var scale = new Vector3(width, offset.magnitude / 2.0f, width);
         var position = start + (offset / 2.0f);
@@ -130,8 +135,10 @@ public class graphConstructor : MonoBehaviour
         cylinder.transform.up = offset;
         cylinder.transform.localScale = scale;
 
-        connectNodeArray[0].GetComponent<Outline>().enabled = false;
-        connectNodeArray[1].GetComponent<Outline>().enabled = false;
+        // connectNodeArray[0].GetComponent<Outline>().enabled = false;
+        // connectNodeArray[1].GetComponent<Outline>().enabled = false;
+
+
 
         connectNodeArray[0] = null;
         connectNodeArray[1] = null;
